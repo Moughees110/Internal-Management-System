@@ -119,3 +119,7 @@ coverage/
 *.sublime-project
 *.sublime-workspace
 
+# Backend specific
+uploads/
+data/
+sqlite.db
