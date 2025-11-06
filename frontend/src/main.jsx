@@ -21,10 +21,10 @@ import Projects from "./components/Projects";
 import { SidebarProvider } from "./context/Sidebarcontext";
 
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <Login />,
-  },
+  // {
+  //   path: "/login",
+  //   element: <Login />,
+  // },
   {
     path: "/",
     element: (
