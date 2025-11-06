@@ -36,7 +36,7 @@ export default function App() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {isAuthenticated && (
+      {/* {isAuthenticated && ( */}
         <Sidebar
           collapsed={collapsed}
           toggleSidebar={() => setCollapsed((prev) => !prev)}
@@ -44,16 +44,16 @@ export default function App() {
           setActive={setActiveComponent}
           onLogout={handleLogout}
         />
-      )}
+      {/* )} */}
 
       <div className="flex-1 flex flex-col overflow-y-auto">
-        {isAuthenticated && (
+        {/* {isAuthenticated && ( */}
           <Header
             activeComponent={activeComponent}
             collapsed={collapsed}
             toggleSidebar={() => setCollapsed((prev) => !prev)}
           />
-        )}
+        {/* )} */}
         <main className="p-6">
           <Outlet />
         </main>
