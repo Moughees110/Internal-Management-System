@@ -4,7 +4,7 @@ exports.getAllCheckIn = async ( req , res ) => {
     try {
         
      const checkIn=await checkInService.getAllCheckIn();
-      res.status(200).json({ checkIn });
+        res.status(200).json({ checkIn });
 
     } catch (error) {
         

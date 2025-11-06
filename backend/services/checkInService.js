@@ -2,7 +2,7 @@ const checkIn = require("../models/checkInModel")
 
 const getAllCheckIn = async () => {
 
-    return await checkIn.find();
+   return await checkIn.find().sort({ createdAt: -1 });
 }
 
 const createCheckIn = async ({ date , time , status }) => {
