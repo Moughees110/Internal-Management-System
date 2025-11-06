@@ -8,14 +8,12 @@ import {
   Layers2,
   ClipboardCheck,
   Building,
-  Menu,
   LogIn,
   LogOut,
   ArrowRightToLine,
   ArrowLeftToLine,
   ChevronDown,
-  ChevronUp,
-  X,
+  ChevronUp
 } from "lucide-react";
 
 import axios from "axios";
@@ -27,7 +25,7 @@ export default function Sidebar({
   toggleSidebar,
   active,
   setActive,
-  onLogout,
+  onLogout
 }) {
   const [attendanceHovered, setAttendanceHovered] = useState(false);
   const [leaveHovered, setLeaveHovered] = useState(false);
@@ -38,22 +36,21 @@ export default function Sidebar({
       const user = JSON.parse(localStorage.getItem("user"));
 
       if (token && user?.id) {
-try {
-  const response = await axios.get(
-    `http://localhost:5000/api/tokens/token/${user.id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  if (response.status === 200) {
-    localStorage.setItem("token", response.data.token);
-    // console.log("🔄 Token verified successfully:", response.data.token); 
-  }
-} catch (err) {
-  console.error(" Token refresh failed:", err);
-}
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/api/tokens/token/${user.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          if (response.status === 200) {
+            localStorage.setItem("token", response.data.token);
+          }
+        } catch (err) {
+          console.error("Token refresh failed:", err);
+        }
       }
     };
 
@@ -64,26 +61,40 @@ try {
     <aside
       className={`${
         collapsed ? "w-20" : "w-54"
-      } bg-white dark:bg-gray-800 shadow-lg h-screen transition-all duration-500 ease-in-out flex flex-col`}
+      } bg-white dark:bg-gray-800 shadow-lg h-screen overflow-hidden transition-all duration-500 ease-in-out flex flex-col relative`}
     >
-      <div className="h-16 flex items-center justify-between px-4 shadow-md dark:shadow-gray-800 bg-white">
-        {!collapsed && (
+      {/* White Header Section with Logo / Favicon */}
+      <div className="h-16 flex items-center justify-center px-4 shadow-md dark:shadow-gray-800 bg-white">
+        {collapsed ? (
+          <img
+            src="/src/assets/image/favicon 1.png"
+            alt="Huboweb Icon"
+            className="h-8 w-8"
+          />
+        ) : (
           <img
             src="/src/assets/image/huboweb.png"
-            alt="Huboweb"
+            alt="Huboweb Logo"
             className="h-9 w-auto"
           />
         )}
-        <button
-          onClick={toggleSidebar}
-          className="ml-auto p-2 rounded-md transition-colors duration-300 text-gray-600 dark:text-gray-200 hover:bg-blue-100"
-        >
-          {collapsed ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-        </button>
       </div>
 
-      <div className="flex-1 bg-gradient-to-b from-[#1E3A8A] to-[#abd2ff] p-2 overflow-y-auto">
-        <nav className="flex flex-col gap-1">
+      {/* Sidebar Menu */}
+      <div className="flex-1 bg-gradient-to-b from-[#1E3A8A] to-[#abd2ff] p-2 overflow-y-auto relative scrollbar-hide">
+        {/* Toggle button fixed in top-right corner */}
+        <button
+          onClick={toggleSidebar}
+          className="absolute top-5 right-[-10px]  p-2 rounded-md transition-colors duration-300  text-white hover:text-blue-300 z-10"
+        >
+          {collapsed ? (
+            <ArrowRightToLine className="w-6 h-5" />
+          ) : (
+            <ArrowLeftToLine className="w-6 h-5" />
+          )}
+        </button>
+
+        <nav className="flex flex-col gap-1 mt-2">
           <SidebarLink
             to="/dashboard"
             icon={LayoutDashboard}
@@ -100,6 +111,7 @@ try {
             setActive={setActive}
             collapsed={collapsed}
           />
+
           <DropdownSection
             label="Attendance"
             icon={CalendarCheck}
@@ -108,10 +120,11 @@ try {
             collapsed={collapsed}
             items={[
               { to: "/checkin", icon: LogIn, label: "Check In" },
-              { to: "/checkout", icon: LogOut, label: "Check Out" },
+              { to: "/checkout", icon: LogOut, label: "Check Out" }
             ]}
             setActive={setActive}
           />
+
           <SidebarLink
             to="/user"
             icon={User}
@@ -136,6 +149,7 @@ try {
             setActive={setActive}
             collapsed={collapsed}
           />
+
           <DropdownSection
             label="Leave"
             icon={ClipboardCheck}
@@ -143,11 +157,20 @@ try {
             setHovered={setLeaveHovered}
             collapsed={collapsed}
             items={[
-              { to: "/apply-leave", icon: ArrowRightToLine, label: "Apply Leave" },
-              { to: "/leave-history", icon: ArrowLeftToLine, label: "Leave History" },
+              {
+                to: "/apply-leave",
+                icon: ArrowRightToLine,
+                label: "Apply Leave"
+              },
+              {
+                to: "/leave-history",
+                icon: ArrowLeftToLine,
+                label: "Leave History"
+              }
             ]}
             setActive={setActive}
           />
+
           <SidebarLink
             to="/task"
             icon={ClipboardCheck}
@@ -177,7 +200,7 @@ try {
             onClick={onLogout}
             className={`${
               collapsed ? "justify-center" : "justify-start"
-            } flex items-center gap-3 w-full p-3 mt-2 text-red-600 hover:bg-red-100 rounded-lg transition`}
+            } flex items-center gap-1  w-full p-3 mt-2 text-red-600 hover:bg-red-100 rounded-lg transition`}
           >
             <LogOut className="w-5 h-5" />
             {!collapsed && <span>Logout</span>}
@@ -188,6 +211,7 @@ try {
   );
 }
 
+/* --- SidebarLink Component --- */
 function SidebarLink({ to, icon: Icon, label, active, setActive, collapsed }) {
   return (
     <NavLink
@@ -207,6 +231,7 @@ function SidebarLink({ to, icon: Icon, label, active, setActive, collapsed }) {
   );
 }
 
+/* --- DropdownSection (hover bug fixed cleanly) --- */
 function DropdownSection({
   label,
   icon: Icon,
@@ -214,12 +239,17 @@ function DropdownSection({
   setHovered,
   collapsed,
   items,
-  setActive,
+  setActive
 }) {
   return (
     <div
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={(e) => {
+        const related = e.relatedTarget;
+        if (!e.currentTarget.contains(related)) {
+          setHovered(false);
+        }
+      }}
       className="relative"
     >
       <div
@@ -241,8 +271,9 @@ function DropdownSection({
           ))}
       </div>
 
+      {/* Dropdown Items */}
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`overflow-hidden transition-all duration-200 ease-in-out ${
           hovered && !collapsed ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
