@@ -97,7 +97,9 @@ export default function Checkin() {
         collapsed ? "ml-20" : "ml-64"
       } p-4 sm:p-6`}
     >
-      <div className={isModalOpen ? "blur-sm pointer-events-none select-none" : ""}>
+      <div
+        className={isModalOpen ? "blur-sm pointer-events-none select-none" : ""}
+      >
         <div className="flex justify-between items-center mb-4">
           <button
             onClick={() => openModal()}
@@ -126,7 +128,10 @@ export default function Checkin() {
                 </tr>
               ) : (
                 checkins.map((entry, index) => (
-                  <tr key={entry.id || index} className="hover:bg-gray-100 transition-colors">
+                  <tr
+                    key={entry.id || index}
+                    className="hover:bg-gray-100 transition-colors"
+                  >
                     <td className="px-4 py-2">{entry.time}</td>
                     <td className="px-4 py-2">{entry.date}</td>
                     <td className="px-4 py-2 capitalize">{entry.status}</td>
@@ -175,7 +180,7 @@ export default function Checkin() {
             className="p-4 flex flex-col gap-4 bg-white"
           >
             <label className="flex flex-col text-sm text-gray-900">
-            Start  Time <span className="text-red-500">*</span>
+              Start Time <span className="text-red-500">*</span>
               <input
                 type="time"
                 value={time}
