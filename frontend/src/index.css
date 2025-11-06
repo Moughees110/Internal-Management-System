@@ -42,3 +42,14 @@ body {
 img:hover {
   transform: scale(1.05);
 } */
+
+
+/* Completely hide scrollbar but keep scroll functionality */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
