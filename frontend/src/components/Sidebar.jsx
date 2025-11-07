@@ -218,12 +218,13 @@ function SidebarLink({ to, icon: Icon, label, active, setActive, collapsed }) {
       to={to}
       onClick={() => setActive(label)}
       className={({ isActive }) =>
-        `${
-          isActive || active === label
-            ? "bg-blue-100 text-blue-600 dark:bg-blue-900"
-            : "hover:bg-blue-100 hover:text-black text-white dark:text-gray-300"
-        } flex items-center gap-3 w-full p-3 rounded-lg transition`
-      }
+  `${
+    isActive || active === label
+      ? "bg-blue-100/60 text-black dark:bg-blue-900"
+      : "hover:bg-blue-100/60 hover:text-black text-white dark:text-gray-300"
+  } flex items-center gap-3 w-full p-3 rounded-lg transition`
+}
+
     >
       <Icon className="w-5 h-5" />
       {!collapsed && <span>{label}</span>}
@@ -254,10 +255,11 @@ function DropdownSection({
     >
       <div
         className={`${
-          hovered
-            ? "bg-blue-100 text-blue-600 dark:bg-blue-900"
-            : "hover:bg-blue-100 hover:text-black text-white dark:text-gray-300"
-        } flex items-center justify-between gap-3 w-full p-3 rounded-lg transition cursor-pointer`}
+  hovered
+    ? "bg-blue-100/60 text-black dark:bg-blue-900"
+    : "hover:bg-blue-100/60 hover:text-black text-white dark:text-gray-300"
+} flex items-center justify-between gap-3 w-full p-3 rounded-lg transition cursor-pointer`}
+
       >
         <div className="flex items-center gap-3">
           <Icon className="w-5 h-5" />
