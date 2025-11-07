@@ -17,7 +17,7 @@ import Applyleave from "./components/Applyleave";
 import Leavehistory from "./components/Leavehistory";
 import Handbook from "./components/Handbook";
 import Projects from "./components/Projects";
-import ProtectedRoute from "./components/ProtectedRoute";
+// import ProtectedRoute from "./components/ProtectedRoute";
 import { SidebarProvider } from "./context/Sidebarcontext";
 
 const router = createBrowserRouter([
