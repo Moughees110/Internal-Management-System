@@ -21,7 +21,7 @@ export default function Checkout() {
     try {
       const res = await fetch(`${API_URL}/getCheckOut`);
       const data = await res.json();
-      setCheckouts(data.checkOut || []);
+      setCheckouts(data.checkOut?.data || []);
     } catch (err) {
       console.error("Error fetching checkouts:", err);
     }
@@ -92,7 +92,9 @@ export default function Checkout() {
         collapsed ? "ml-20" : "ml-64"
       } p-4 sm:p-6`}
     >
-      <div className={isModalOpen ? "blur-sm pointer-events-none select-none" : ""}>
+      <div
+        className={isModalOpen ? "blur-sm pointer-events-none select-none" : ""}
+      >
         <div className="flex justify-between items-center mb-4">
           <button
             onClick={() => openModal()}
@@ -120,7 +122,10 @@ export default function Checkout() {
                 </tr>
               ) : (
                 checkouts.map((entry, index) => (
-                  <tr key={index} className="hover:bg-gray-100 transition-colors">
+                  <tr
+                    key={index}
+                    className="hover:bg-gray-100 transition-colors"
+                  >
                     <td className="px-4 py-2">{entry.endTime}</td>
                     <td className="px-4 py-2">{entry.endDate}</td>
                     <td className="px-4 py-2 flex gap-3">
@@ -149,7 +154,9 @@ export default function Checkout() {
         <div className="fixed inset-0 z-50 flex justify-end">
           <div className="h-full w-full max-w-md bg-white shadow-lg overflow-y-auto transition-all">
             <div className="flex justify-between items-center p-4 border-b border-gray-300 bg-white">
-              <h3 className="text-lg font-semibold text-blue-800">Add Check Out</h3>
+              <h3 className="text-lg font-semibold text-blue-800">
+                Add Check Out
+              </h3>
               <button
                 onClick={closeModal}
                 className="text-gray-700 hover:text-gray-900"
