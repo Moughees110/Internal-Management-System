@@ -7,6 +7,7 @@ const checkInRoutes = require("./routes/checkInRoutes");
 const checkOutRoutes = require("./routes/checkOutRoutes");
 const clientsRoutes= require("./routes/clientsRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
+const leaveRoute = require("./routes/leaveRoute");
 
 dotenv.config();
 connectDB();
@@ -21,5 +22,6 @@ app.use("/api/checkIn", checkInRoutes);
 app.use("/api/checkouts", checkOutRoutes);
 app.use("/api/clients", clientsRoutes);
 app.use("/api/employee", employeeRoutes);
+app.use("/api/leaves",leaveRoute);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
