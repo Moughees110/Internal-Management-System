@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const connectDB = require("./Config/db");
 const checkInRoutes = require("./routes/checkInRoutes");
 const checkOutRoutes = require("./routes/checkOutRoutes");
+const clientsRoutes= require("./routes/clientsRoutes");
 
 dotenv.config();
 connectDB();
@@ -17,5 +18,6 @@ app.use(express.json());
 
 app.use("/api/checkIn", checkInRoutes);
 app.use("/api/checkouts", checkOutRoutes);
+app.use("/api/clients", clientsRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
