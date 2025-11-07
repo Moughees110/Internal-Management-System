@@ -21,7 +21,7 @@ export default function Checkin() {
     try {
       const response = await fetch(`${API_URL}/getCheckIn`);
       const data = await response.json();
-      setCheckins(data.checkIns || []);
+      setCheckins(data.checkIn || []);
     } catch (err) {
       console.error("Error fetching check-ins:", err);
       alert("Failed to fetch check-ins. Check your backend and API URL.");
