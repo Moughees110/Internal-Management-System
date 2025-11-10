@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSidebar } from "../context/Sidebarcontext";
-import { Pencil, Trash2, Plus, X } from "lucide-react";
+import { Trash2, Plus, X } from "lucide-react";
 
 export default function Checkout() {
   const { collapsed } = useSidebar();
   const [checkouts, setCheckouts] = useState([]);
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
 
   const API_URL = "http://localhost:5000/api/checkouts";
 
@@ -21,23 +19,17 @@ export default function Checkout() {
     try {
       const res = await fetch(`${API_URL}/getCheckOut`);
       const data = await res.json();
-      setCheckouts(data.checkOut?.data || []);
+      const checkoutData = data.checkOut?.data || [];
+      setCheckouts(Array.isArray(checkoutData) ? checkoutData : []);
     } catch (err) {
       console.error("Error fetching checkouts:", err);
+      setCheckouts([]);
     }
   };
 
-  const openModal = (index = null) => {
-    if (index !== null) {
-      const entry = checkouts[index];
-      setEditIndex(index);
-      setTime(entry.endTime);
-      setDate(entry.endDate);
-    } else {
-      setEditIndex(null);
-      setTime("");
-      setDate("");
-    }
+  const openModal = () => {
+    setTime("");
+    setDate("");
     setIsModalOpen(true);
   };
 
@@ -45,7 +37,6 @@ export default function Checkout() {
     setIsModalOpen(false);
     setTime("");
     setDate("");
-    setEditIndex(null);
   };
 
   const handleSave = async () => {
@@ -78,11 +69,24 @@ export default function Checkout() {
     }
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this checkout?")) {
-      const updated = checkouts.filter((_, i) => i !== index);
-      setCheckouts(updated);
-      alert("Checkout deleted!");
+      try {
+        const response = await fetch(`${API_URL}/deleteCheckOut/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to delete check-out");
+        }
+
+        alert("Checkout deleted!");
+        fetchCheckouts();
+      } catch (error) {
+        console.error("Error deleting check-out:", error);
+        alert(`Error: ${error.message}`);
+      }
     }
   };
 
@@ -110,7 +114,7 @@ export default function Checkout() {
               <tr className="border-b border-blue-300">
                 <th className="text-left text-sm px-2 py-2">End Time</th>
                 <th className="text-left text-sm px-2 py-2">End Date</th>
-                <th className="text-left text-sm px-2 py-2">Actions</th>
+                <th className="text-left text-sm px-2 py-2">Action</th>
               </tr>
             </thead>
             <tbody className="bg-white text-gray-900">
@@ -123,20 +127,14 @@ export default function Checkout() {
               ) : (
                 checkouts.map((entry, index) => (
                   <tr
-                    key={index}
+                    key={entry._id || index}
                     className="hover:bg-gray-100 transition-colors"
                   >
                     <td className="px-4 py-2">{entry.endTime}</td>
                     <td className="px-4 py-2">{entry.endDate}</td>
-                    <td className="px-4 py-2 flex gap-3">
+                    <td className="px-4 py-2">
                       <button
-                        onClick={() => openModal(index)}
-                        className="text-yellow-600 hover:text-yellow-800"
-                      >
-                        <Pencil size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(entry._id)}
                         className="text-red-600 hover:text-red-800"
                       >
                         <Trash2 size={18} />
