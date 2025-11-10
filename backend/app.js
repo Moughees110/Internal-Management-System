@@ -10,7 +10,7 @@ const employeeRoutes = require("./routes/employeeRoutes");
 const leaveRoute = require("./routes/leaveRoute");
 const roleRoutes=require("./routes/roleRoutes");
 const projectRoute = require("./routes/projectRoute");
-
+const taskRoutes = require("./routes/taskRoutes");
 dotenv.config();
 connectDB();
 const app = express();
@@ -27,6 +27,8 @@ app.use("/api/employee", employeeRoutes);
 app.use("/api/leaves",leaveRoute);
 app.use("/api/roles",roleRoutes);
 app.use("/api/projects", projectRoute);
+app.use("/api/tasks", taskRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
