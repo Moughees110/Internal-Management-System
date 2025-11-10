@@ -85,7 +85,7 @@ export default function Sidebar({
         {/* Toggle button fixed in top-right corner */}
         <button
           onClick={toggleSidebar}
-          className="absolute top-5 right-[-10px]  p-2 rounded-md transition-colors duration-300  text-white hover:text-blue-300 z-10"
+          className="absolute top-1 right-[-10px]  p-2 rounded-md transition-colors duration-300  text-white hover:text-blue-300 z-10"
         >
           {collapsed ? (
             <ArrowRightToLine className="w-6 h-5" />
@@ -94,7 +94,7 @@ export default function Sidebar({
           )}
         </button>
 
-        <nav className="flex flex-col gap-1 mt-2">
+        <nav className="flex flex-col gap-1 mt-5">
           <SidebarLink
             to="/dashboard"
             icon={LayoutDashboard}
