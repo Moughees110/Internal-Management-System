@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSidebar } from "../context/Sidebarcontext";
-import { Pencil, Trash2, Plus, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 
 export default function Checkin() {
   const { collapsed } = useSidebar();
@@ -9,7 +9,6 @@ export default function Checkin() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("Pending");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
 
   const API_URL = "http://localhost:5000/api/checkIn";
 
@@ -28,19 +27,10 @@ export default function Checkin() {
     }
   };
 
-  const openModal = (index = null) => {
-    if (index !== null) {
-      const checkin = checkins[index];
-      setTime(checkin.time);
-      setDate(checkin.date);
-      setStatus(checkin.status);
-      setEditIndex(index);
-    } else {
-      setTime("");
-      setDate("");
-      setStatus("Pending");
-      setEditIndex(null);
-    }
+  const openModal = () => {
+    setTime("");
+    setDate("");
+    setStatus("Pending");
     setIsModalOpen(true);
   };
 
@@ -49,7 +39,6 @@ export default function Checkin() {
     setTime("");
     setDate("");
     setStatus("Pending");
-    setEditIndex(null);
   };
 
   const handleSave = async () => {
@@ -71,24 +60,13 @@ export default function Checkin() {
         throw new Error(errorData.error || "Failed to save check-in");
       }
 
-      alert(editIndex !== null ? "Check-in updated!" : "Check-in added!");
+      alert("Check-in added!");
       closeModal();
       fetchCheckins();
     } catch (error) {
       console.error("Error saving check-in:", error);
       alert(`Error: ${error.message}`);
     }
-  };
-
-  const handleDelete = (index) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this check-in?"
-    );
-    if (!confirmDelete) return;
-
-    const updated = checkins.filter((_, i) => i !== index);
-    setCheckins(updated);
-    alert("Check-in deleted (local only; implement DELETE API to persist).");
   };
 
   return (
@@ -116,13 +94,12 @@ export default function Checkin() {
                 <th className="text-left text-sm px-2 py-2">Start Time</th>
                 <th className="text-left text-sm px-2 py-2">Start Date</th>
                 <th className="text-left text-sm px-2 py-2">Status</th>
-                <th className="text-left text-sm px-2 py-2">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white text-gray-900">
               {checkins.length === 0 ? (
                 <tr className="text-center">
-                  <td colSpan={4} className="py-6 text-gray-500">
+                  <td colSpan={3} className="py-6 text-gray-500">
                     No check-ins found.
                   </td>
                 </tr>
@@ -135,20 +112,6 @@ export default function Checkin() {
                     <td className="px-4 py-2">{entry.time}</td>
                     <td className="px-4 py-2">{entry.date}</td>
                     <td className="px-4 py-2 capitalize">{entry.status}</td>
-                    <td className="px-4 py-2 flex gap-3">
-                      <button
-                        onClick={() => openModal(index)}
-                        className="text-yellow-600 hover:text-yellow-800"
-                      >
-                        <Pencil size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(index)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
                   </tr>
                 ))
               )}
@@ -161,7 +124,7 @@ export default function Checkin() {
         <div className="fixed top-17 right-0 bottom-0 z-50 w-full max-w-md bg-white shadow-lg overflow-y-auto transition-all">
           <div className="flex justify-between items-center p-4 border-b border-gray-300 bg-white">
             <h3 className="text-lg font-semibold text-blue-800">
-              {editIndex !== null ? "Edit Check In" : "Add Check In"}
+              Add Check In
             </h3>
             <button
               onClick={closeModal}
