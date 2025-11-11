@@ -13,7 +13,7 @@ export default function Client() {
     name: "",
     rate: "",
     frequency: "",
-    type: ""
+    type: "",
   });
 
   useEffect(() => {
@@ -23,16 +23,26 @@ export default function Client() {
   const fetchClients = async () => {
     try {
       const res = await axios.get(`${API_BASE}/getClients`);
-      setClients(res.data.clientList);
+      const list = Array.isArray(res.data?.clientList)
+        ? res.data.clientList
+        : [];
+      setClients(list);
     } catch (err) {
       console.error("Error fetching clients:", err);
       alert("Failed to load clients");
+      setClients([]);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditingClient(null);
+    setForm({ name: "", rate: "", frequency: "", type: "" });
   };
 
   const openAddModal = () => {
@@ -43,7 +53,12 @@ export default function Client() {
 
   const openEditModal = (client) => {
     setEditingClient(client);
-    setForm({ ...client });
+    setForm({
+      name: client.name || "",
+      rate: client.rate || "",
+      frequency: client.frequency || "",
+      type: client.type || "",
+    });
     setModalOpen(true);
   };
 
@@ -56,12 +71,12 @@ export default function Client() {
     try {
       const payload = { ...form };
       if (editingClient) {
-        payload.id = editingClient.id;
+        payload.id = editingClient._id || editingClient.id;
       }
 
       await axios.post(`${API_BASE}/addClient`, payload);
-      setModalOpen(false);
       fetchClients();
+      closeModal();
     } catch (err) {
       console.error("Error saving client:", err);
       alert("Failed to save client");
@@ -73,7 +88,7 @@ export default function Client() {
       return;
 
     try {
-      await axios.delete(`${API_BASE}/deleteClient/${client.id}`);
+      await axios.delete(`${API_BASE}/deleteClient/${client._id || client.id}`);
       fetchClients();
     } catch (err) {
       console.error("Error deleting client:", err);
@@ -127,7 +142,7 @@ export default function Client() {
               ) : (
                 clients.map((client) => (
                   <tr
-                    key={client.id}
+                    key={client._id || client.id}
                     className="hover:bg-gray-100 transition-colors"
                   >
                     <td className="px-4 py-2">{client.name}</td>
@@ -165,7 +180,7 @@ export default function Client() {
               {editingClient ? "Edit Client" : "Add Client"}
             </h3>
             <button
-              onClick={() => setModalOpen(false)}
+              onClick={closeModal}
               className="text-gray-700 hover:text-gray-900"
               aria-label="Close modal"
             >
@@ -243,7 +258,7 @@ export default function Client() {
             <div className="flex justify-end gap-3 mt-4">
               <button
                 type="button"
-                onClick={() => setModalOpen(false)}
+                onClick={closeModal}
                 className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
               >
                 Cancel
